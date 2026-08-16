@@ -1,0 +1,125 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "PORT-0003 Synthetic Target API",
+    "version": "1.0.0",
+    "description": "Local fictional support-entitlement target. No production system."
+  },
+  "servers": [
+    {"url": "http://127.0.0.1:{port}", "variables": {"port": {"default": "8102"}}}
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "targetHealth",
+        "responses": {"200": {"description": "Local service ready"}}
+      }
+    },
+    "/target/entitlements/{account_id}": {
+      "put": {
+        "operationId": "upsertSyntheticEntitlement",
+        "security": [{"LocalApiKey": []}],
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string", "pattern": "^ACCOUNT-[0-9]{4}$"}
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {"schema": {"$ref": "#/components/schemas/TargetEntitlement"}}
+          }
+        },
+        "responses": {
+          "200": {"description": "Applied or idempotently unchanged"},
+          "401": {"description": "Invalid local API key"},
+          "409": {"description": "Target version guard rejected older or equal state"},
+          "429": {"description": "Modeled transient rate limit"},
+          "503": {"description": "Modeled transient target unavailability"}
+        }
+      },
+      "get": {
+        "operationId": "getSyntheticEntitlement",
+        "security": [{"LocalApiKey": []}],
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string", "pattern": "^ACCOUNT-[0-9]{4}$"}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Synthetic entitlement",
+            "content": {
+              "application/json": {"schema": {"$ref": "#/components/schemas/TargetEntitlement"}}
+            }
+          },
+          "404": {"description": "Synthetic entitlement not found"}
+        }
+      }
+    },
+    "/target/entitlements": {
+      "get": {
+        "operationId": "listSyntheticEntitlements",
+        "security": [{"LocalApiKey": []}],
+        "responses": {
+          "200": {
+            "description": "Complete synthetic target universe",
+            "content": {
+              "application/json": {
+                "schema": {"type": "array", "items": {"$ref": "#/components/schemas/TargetEntitlement"}}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "LocalApiKey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-PORT0003-API-Key",
+        "description": "Runtime environment value; never committed."
+      }
+    },
+    "schemas": {
+      "TargetEntitlement": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "account_id",
+          "entitlement_status",
+          "support_priority",
+          "coverage_region",
+          "product_scope",
+          "source_version",
+          "correlation_id",
+          "last_event_id",
+          "updated_at"
+        ],
+        "properties": {
+          "account_id": {"type": "string", "pattern": "^ACCOUNT-[0-9]{4}$"},
+          "entitlement_status": {"type": "string", "enum": ["ENABLED", "PENDING", "DISABLED"]},
+          "support_priority": {"type": "string", "enum": ["Normal", "High", "Urgent"]},
+          "coverage_region": {"type": "string", "enum": ["NorthAmerica", "Europe", "AsiaPacific"]},
+          "product_scope": {
+            "type": "string",
+            "pattern": "^[A-Z0-9]+(?:_[A-Z0-9]+)*$",
+            "maxLength": 40
+          },
+          "source_version": {"type": "integer", "minimum": 1},
+          "correlation_id": {"type": "string", "pattern": "^TRACE-[A-Z0-9-]+$"},
+          "last_event_id": {"type": "string", "pattern": "^EVENT-[0-9]{4}$"},
+          "updated_at": {"type": "string", "pattern": "^T\\+[0-9]{4}$"}
+        }
+      }
+    }
+  }
+}

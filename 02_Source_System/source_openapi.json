@@ -1,0 +1,151 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "PORT-0003 Synthetic Source API",
+    "version": "1.0.0",
+    "description": "Local fictional account-event source. No real customer or production data."
+  },
+  "servers": [
+    {"url": "http://127.0.0.1:{port}", "variables": {"port": {"default": "8101"}}}
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "sourceHealth",
+        "responses": {"200": {"description": "Local service ready"}}
+      }
+    },
+    "/source/accounts/apply": {
+      "post": {
+        "operationId": "applySyntheticSourceEvent",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {"schema": {"$ref": "#/components/schemas/SourceEvent"}}
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Source truth applied, duplicate, or out of order",
+            "content": {
+              "application/json": {"schema": {"$ref": "#/components/schemas/SourceApplyResult"}}
+            }
+          },
+          "422": {"description": "Source event violates the strict contract"}
+        }
+      }
+    },
+    "/source/accounts": {
+      "get": {
+        "operationId": "listSyntheticSourceAccounts",
+        "responses": {
+          "200": {
+            "description": "Latest valid synthetic source states",
+            "content": {
+              "application/json": {
+                "schema": {"type": "array", "items": {"$ref": "#/components/schemas/SourceAccount"}}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/source/accounts/{account_id}": {
+      "get": {
+        "operationId": "getSyntheticSourceAccount",
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string", "pattern": "^ACCOUNT-[0-9]{4}$"}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Latest valid synthetic source state",
+            "content": {
+              "application/json": {"schema": {"$ref": "#/components/schemas/SourceAccount"}}
+            }
+          },
+          "404": {"description": "Synthetic account not found"}
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SourceEvent": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "event_id",
+          "event_version",
+          "event_type",
+          "account_id",
+          "account_status",
+          "support_tier",
+          "region",
+          "product_family",
+          "contract_state",
+          "occurred_at"
+        ],
+        "properties": {
+          "event_id": {"type": "string", "pattern": "^EVENT-[0-9]{4}$"},
+          "event_version": {"type": "integer", "minimum": 1},
+          "event_type": {
+            "type": "string",
+            "enum": ["account.created", "account.updated", "account.suspended"]
+          },
+          "account_id": {"type": "string", "pattern": "^ACCOUNT-[0-9]{4}$"},
+          "account_status": {"type": "string", "enum": ["Active", "Suspended", "Closed"]},
+          "support_tier": {"type": "string", "enum": ["Standard", "Priority", "Premium"]},
+          "region": {"type": "string", "enum": ["NorthAmerica", "Europe", "AsiaPacific"]},
+          "product_family": {"type": "string", "minLength": 1, "maxLength": 40},
+          "contract_state": {"type": "string", "enum": ["Current", "Pending", "Expired"]},
+          "occurred_at": {"type": "string", "pattern": "^T\\+[0-9]{4}$"}
+        }
+      },
+      "SourceAccount": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "account_id",
+          "account_status",
+          "support_tier",
+          "region",
+          "product_family",
+          "contract_state",
+          "source_version",
+          "last_event_id",
+          "occurred_at"
+        ],
+        "properties": {
+          "account_id": {"type": "string"},
+          "account_status": {"type": "string"},
+          "support_tier": {"type": "string"},
+          "region": {"type": "string"},
+          "product_family": {"type": "string"},
+          "contract_state": {"type": "string"},
+          "source_version": {"type": "integer"},
+          "last_event_id": {"type": "string"},
+          "occurred_at": {"type": "string"}
+        }
+      },
+      "SourceApplyResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["disposition", "account_id", "source_version", "last_event_id"],
+        "properties": {
+          "disposition": {
+            "type": "string",
+            "enum": ["SOURCE_APPLIED", "SOURCE_DUPLICATE", "SOURCE_OUT_OF_ORDER"]
+          },
+          "account_id": {"type": "string"},
+          "source_version": {"type": "integer"},
+          "last_event_id": {"type": "string"}
+        }
+      }
+    }
+  }
+}

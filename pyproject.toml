@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools==80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "port0003-integration-reliability"
+version = "0.1.0"
+description = "Synthetic local account-to-support entitlement integration proof"
+requires-python = "==3.11.*"
+dependencies = [
+  "fastapi==0.139.2",
+  "httpx==0.28.1",
+  "pydantic==2.13.4",
+  "uvicorn==0.51.0",
+]
+
+[project.optional-dependencies]
+test = ["pytest==9.1.1"]
+
+[tool.pytest.ini_options]
+testpaths = ["07_Tests"]
+python_files = ["test_port0003_end_to_end.py"]
+addopts = "-ra --strict-markers"
+

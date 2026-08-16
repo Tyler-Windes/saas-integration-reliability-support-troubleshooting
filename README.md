@@ -47,7 +47,7 @@ py -3.11 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install --requirement dependency-lock.txt
 $env:PORT0003_LOCAL_API_KEY = 'replace-with-local-test-value'
 .\.venv\Scripts\python.exe -B -m pytest -q -p no:cacheprovider
-.\.venv\Scripts\python.exe -B validation\validate_public_candidate.py
+.\.venv\Scripts\python.exe -B validation\validate_repository.py
 ```
 
 Unix-like shells can set the same local placeholder with `export PORT0003_LOCAL_API_KEY=replace-with-local-test-value` and invoke the environment's `python` executable.
@@ -68,5 +68,4 @@ The `.env.example` file documents only the executed Python path. The n8n draft r
 
 The repository-specific validator checks topology, contracts, mapping rules, service authentication, the exact scenario set, deterministic execution, retries, dead-letter/replay lineage, reconciliation, public documentation, links, and privacy/secret/path boundaries. A clean run prints:
 
-`PASS_PORT0003_PUBLIC_TECHNICAL_CANDIDATE`
-
+`PASS_PORT0003_PUBLIC_TECHNICAL_REPOSITORY`

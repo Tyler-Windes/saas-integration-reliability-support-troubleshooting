@@ -191,7 +191,7 @@
   "schema_version": "1.0.0",
   "scope": "PUBLIC_TECHNICAL_WORK_SAMPLE",
   "synthetic_nonproduction_boundary": true,
-  "terminal": "PASS_PORT0003_PUBLIC_TECHNICAL_CANDIDATE",
+  "terminal": "PASS_PORT0003_PUBLIC_TECHNICAL_REPOSITORY",
   "tests": {
     "attempt_vector": [
       1,

@@ -25,7 +25,7 @@ import httpx
 
 ROOT = Path(__file__).resolve().parents[1]
 RESULT_REL = "validation/validation-summary.json"
-PASS_TERMINAL = "PASS_PORT0003_PUBLIC_TECHNICAL_CANDIDATE"
+PASS_TERMINAL = "PASS_PORT0003_PUBLIC_TECHNICAL_REPOSITORY"
 N8N_STATUS = "N8N_RUNTIME_EXECUTION_DEFERRED"
 EXERCISE_BOUNDARY = (
     "SYNTHETIC_LOCAL_EXERCISE_ONLY; NO_REAL_CUSTOMER_OR_PRODUCTION_OUTCOME"
@@ -59,7 +59,7 @@ EXPECTED_FILES = (
     "05_Data_Mapping_and_Contracts/PORT0003_Mapping_and_Reliability_Rules.csv",
     "06_Test_Fixtures/PORT0003_12_Scenario_Test_Matrix.json",
     "07_Tests/test_port0003_end_to_end.py",
-    "validation/validate_public_candidate.py",
+    "validation/validate_repository.py",
     RESULT_REL,
 )
 
@@ -205,7 +205,7 @@ def topology_gate() -> dict[str, Any]:
     result_missing = RESULT_REL not in actual
     if result_missing:
         expected.remove(RESULT_REL)
-    require(actual == expected, f"Public candidate topology mismatch: {sorted(actual ^ expected)}")
+    require(actual == expected, f"Public repository topology mismatch: {sorted(actual ^ expected)}")
     for path in ROOT.rglob("*"):
         if path.is_symlink():
             raise ValidationError(f"Symlink is not allowed: {path.relative_to(ROOT)}")
@@ -758,7 +758,7 @@ def main() -> int:
         print(
             json.dumps(
                 {
-                    "terminal": "HOLD_PORT0003_PUBLIC_TECHNICAL_CANDIDATE",
+                    "terminal": "HOLD_PORT0003_PUBLIC_TECHNICAL_REPOSITORY",
                     "passed_gates": len(gate_results),
                     "error_type": type(exc).__name__,
                     "error": str(exc),

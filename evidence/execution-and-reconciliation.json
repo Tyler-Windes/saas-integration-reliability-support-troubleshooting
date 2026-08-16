@@ -1,0 +1,794 @@
+{
+  "execution_mode": "PORTABLE_REFERENCE_ORCHESTRATOR",
+  "exercise_boundary": "SYNTHETIC_LOCAL_EXERCISE_ONLY; NO_REAL_CUSTOMER_OR_PRODUCTION_OUTCOME",
+  "final_reconciliation": {
+    "records": [
+      {
+        "account_id": "ACCOUNT-1001",
+        "classification": "MATCH",
+        "differences": []
+      },
+      {
+        "account_id": "ACCOUNT-1002",
+        "classification": "MATCH",
+        "differences": []
+      },
+      {
+        "account_id": "ACCOUNT-1003",
+        "classification": "MATCH",
+        "differences": []
+      }
+    ],
+    "summary": {
+      "FIELD_MISMATCH": 0,
+      "MATCH": 3,
+      "MISSING_TARGET": 0,
+      "STALE_TARGET": 0,
+      "UNEXPECTED_TARGET": 0
+    }
+  },
+  "n8n_runtime_status": "N8N_RUNTIME_EXECUTION_DEFERRED",
+  "reconciliation_classification_probe": [
+    {
+      "classification": "MATCH",
+      "probe": "equal expected and actual"
+    },
+    {
+      "classification": "MISSING_TARGET",
+      "probe": "source exists and target absent"
+    },
+    {
+      "classification": "STALE_TARGET",
+      "probe": "target source_version is older"
+    },
+    {
+      "classification": "FIELD_MISMATCH",
+      "probe": "same version and mapped field differs"
+    },
+    {
+      "classification": "UNEXPECTED_TARGET",
+      "probe": "target key absent from source universe"
+    }
+  ],
+  "reliability_evidence": {
+    "attempts": [
+      {
+        "account_id": "ACCOUNT-1001",
+        "attempt": 1,
+        "backoff_ms": 0,
+        "correlation_id": "TRACE-0001",
+        "event_id": "EVENT-0001",
+        "evidence_timestamp": "T+0011",
+        "response_status": 200
+      },
+      {
+        "account_id": "ACCOUNT-1001",
+        "attempt": 1,
+        "backoff_ms": 0,
+        "correlation_id": "TRACE-0002",
+        "event_id": "EVENT-0002",
+        "evidence_timestamp": "T+0021",
+        "response_status": 200
+      },
+      {
+        "account_id": "ACCOUNT-1001",
+        "attempt": 1,
+        "backoff_ms": 0,
+        "correlation_id": "TRACE-0003",
+        "event_id": "EVENT-0003",
+        "evidence_timestamp": "T+0031",
+        "response_status": 200
+      },
+      {
+        "account_id": "ACCOUNT-1002",
+        "attempt": 1,
+        "backoff_ms": 100,
+        "correlation_id": "TRACE-0008",
+        "event_id": "EVENT-0007",
+        "evidence_timestamp": "T+0081",
+        "response_status": 429
+      },
+      {
+        "account_id": "ACCOUNT-1002",
+        "attempt": 2,
+        "backoff_ms": 0,
+        "correlation_id": "TRACE-0008",
+        "event_id": "EVENT-0007",
+        "evidence_timestamp": "T+0082",
+        "response_status": 200
+      },
+      {
+        "account_id": "ACCOUNT-1003",
+        "attempt": 1,
+        "backoff_ms": 100,
+        "correlation_id": "TRACE-0009",
+        "event_id": "EVENT-0008",
+        "evidence_timestamp": "T+0091",
+        "response_status": 503
+      },
+      {
+        "account_id": "ACCOUNT-1003",
+        "attempt": 2,
+        "backoff_ms": 200,
+        "correlation_id": "TRACE-0009",
+        "event_id": "EVENT-0008",
+        "evidence_timestamp": "T+0092",
+        "response_status": 503
+      },
+      {
+        "account_id": "ACCOUNT-1003",
+        "attempt": 3,
+        "backoff_ms": 0,
+        "correlation_id": "TRACE-0009",
+        "event_id": "EVENT-0008",
+        "evidence_timestamp": "T+0093",
+        "response_status": 503
+      },
+      {
+        "account_id": "ACCOUNT-1003",
+        "attempt": 1,
+        "backoff_ms": 0,
+        "correlation_id": "TRACE-0012",
+        "event_id": "EVENT-0008",
+        "evidence_timestamp": "T+0121",
+        "response_status": 200
+      }
+    ],
+    "dead_letters": [
+      {
+        "account_id": "ACCOUNT-1003",
+        "attempts": 3,
+        "correlation_id": "TRACE-0009",
+        "event_id": "EVENT-0008",
+        "evidence_timestamp": "T+0009",
+        "failure_classification": "TRANSIENT_RETRY_EXHAUSTED",
+        "final_response": "HTTP_503",
+        "replay_correlation_id": "TRACE-0012",
+        "replay_eligibility": "ELIGIBLE_AFTER_FAULT_CLEARANCE",
+        "resolution_status": "RESOLVED",
+        "resolved_at": "T+0012"
+      }
+    ],
+    "deliveries": [
+      {
+        "account_id": "ACCOUNT-1001",
+        "attempt_count": 1,
+        "correlation_id": "TRACE-0001",
+        "disposition": "APPLIED",
+        "event_id": "EVENT-0001",
+        "evidence_timestamp": "T+0001",
+        "final_response": "HTTP_200",
+        "original_correlation_id": null
+      },
+      {
+        "account_id": "ACCOUNT-1001",
+        "attempt_count": 1,
+        "correlation_id": "TRACE-0002",
+        "disposition": "APPLIED",
+        "event_id": "EVENT-0002",
+        "evidence_timestamp": "T+0002",
+        "final_response": "HTTP_200",
+        "original_correlation_id": null
+      },
+      {
+        "account_id": "ACCOUNT-1001",
+        "attempt_count": 1,
+        "correlation_id": "TRACE-0003",
+        "disposition": "APPLIED",
+        "event_id": "EVENT-0003",
+        "evidence_timestamp": "T+0003",
+        "final_response": "HTTP_200",
+        "original_correlation_id": null
+      },
+      {
+        "account_id": "ACCOUNT-1001",
+        "attempt_count": 0,
+        "correlation_id": "TRACE-0004",
+        "disposition": "DUPLICATE_IGNORED",
+        "event_id": "EVENT-0003",
+        "evidence_timestamp": "T+0004",
+        "final_response": "NO_TARGET_CALL",
+        "original_correlation_id": "TRACE-0003"
+      },
+      {
+        "account_id": "ACCOUNT-1001",
+        "attempt_count": 0,
+        "correlation_id": "TRACE-0005",
+        "disposition": "OUT_OF_ORDER_IGNORED",
+        "event_id": "EVENT-0004",
+        "evidence_timestamp": "T+0005",
+        "final_response": "NO_TARGET_CALL",
+        "original_correlation_id": null
+      },
+      {
+        "account_id": "ACCOUNT-1002",
+        "attempt_count": 0,
+        "correlation_id": "TRACE-0006",
+        "disposition": "REJECTED_MISSING_REQUIRED_FIELD",
+        "event_id": "EVENT-0005",
+        "evidence_timestamp": "T+0006",
+        "final_response": "CONTRACT_VALIDATION_FAILED",
+        "original_correlation_id": null
+      },
+      {
+        "account_id": "ACCOUNT-1003",
+        "attempt_count": 0,
+        "correlation_id": "TRACE-0007",
+        "disposition": "REJECTED_INVALID_ENUM",
+        "event_id": "EVENT-0006",
+        "evidence_timestamp": "T+0007",
+        "final_response": "CONTRACT_VALIDATION_FAILED",
+        "original_correlation_id": null
+      },
+      {
+        "account_id": "ACCOUNT-1002",
+        "attempt_count": 2,
+        "correlation_id": "TRACE-0008",
+        "disposition": "APPLIED_AFTER_RETRY",
+        "event_id": "EVENT-0007",
+        "evidence_timestamp": "T+0008",
+        "final_response": "HTTP_200",
+        "original_correlation_id": null
+      },
+      {
+        "account_id": "ACCOUNT-1003",
+        "attempt_count": 3,
+        "correlation_id": "TRACE-0009",
+        "disposition": "DEAD_LETTERED_RETRY_EXHAUSTED",
+        "event_id": "EVENT-0008",
+        "evidence_timestamp": "T+0009",
+        "final_response": "HTTP_503",
+        "original_correlation_id": null
+      },
+      {
+        "account_id": "ACCOUNT-1004",
+        "attempt_count": 0,
+        "correlation_id": "TRACE-0010",
+        "disposition": "REJECTED_UNAUTHORIZED",
+        "event_id": "EVENT-0009",
+        "evidence_timestamp": "T+0010",
+        "final_response": "HTTP_401",
+        "original_correlation_id": null
+      },
+      {
+        "account_id": "ACCOUNT-1002",
+        "attempt_count": 0,
+        "correlation_id": "TRACE-0011",
+        "disposition": "FIELD_MISMATCH_DETECTED_AND_CORRECTED",
+        "event_id": "EVENT-0007",
+        "evidence_timestamp": "T+0011",
+        "final_response": "CONTROLLED_RECONCILIATION_CORRECTION",
+        "original_correlation_id": "TRACE-0008"
+      },
+      {
+        "account_id": "ACCOUNT-1003",
+        "attempt_count": 1,
+        "correlation_id": "TRACE-0012",
+        "disposition": "RESOLVED_AFTER_REPLAY",
+        "event_id": "EVENT-0008",
+        "evidence_timestamp": "T+0012",
+        "final_response": "HTTP_200",
+        "original_correlation_id": "TRACE-0009"
+      }
+    ]
+  },
+  "run_id": "PORT0003-CANONICAL-RUN-001",
+  "scenario_results": [
+    {
+      "expected_attempt_count": 1,
+      "expected_disposition": "APPLIED",
+      "expected_log_evidence": [
+        "RECEIVED",
+        "TARGET_ATTEMPT",
+        "APPLIED"
+      ],
+      "expected_reconciliation_implication": "MATCH",
+      "expected_target_state": {
+        "account_id": "ACCOUNT-1001",
+        "correlation_id": "TRACE-0001",
+        "coverage_region": "NorthAmerica",
+        "entitlement_status": "ENABLED",
+        "last_event_id": "EVENT-0001",
+        "product_scope": "CORE_SUITE",
+        "source_version": 1,
+        "support_priority": "Normal",
+        "updated_at": "T+0001"
+      },
+      "observed_attempt_count": 1,
+      "observed_disposition": "APPLIED",
+      "observed_log_evidence": [
+        "RECEIVED",
+        "SOURCE_APPLIED",
+        "TRANSFORMED",
+        "TARGET_ATTEMPT",
+        "APPLIED"
+      ],
+      "observed_target_state": {
+        "account_id": "ACCOUNT-1001",
+        "correlation_id": "TRACE-0001",
+        "coverage_region": "NorthAmerica",
+        "entitlement_status": "ENABLED",
+        "last_event_id": "EVENT-0001",
+        "product_scope": "CORE_SUITE",
+        "source_version": 1,
+        "support_priority": "Normal",
+        "updated_at": "T+0001"
+      },
+      "result": "PASS",
+      "scenario": "VALID_CREATE",
+      "sequence": 1
+    },
+    {
+      "expected_attempt_count": 1,
+      "expected_disposition": "APPLIED",
+      "expected_log_evidence": [
+        "RECEIVED",
+        "TARGET_ATTEMPT",
+        "APPLIED"
+      ],
+      "expected_reconciliation_implication": "MATCH",
+      "expected_target_state": {
+        "account_id": "ACCOUNT-1001",
+        "correlation_id": "TRACE-0002",
+        "coverage_region": "NorthAmerica",
+        "entitlement_status": "ENABLED",
+        "last_event_id": "EVENT-0002",
+        "product_scope": "CORE_SUITE",
+        "source_version": 2,
+        "support_priority": "Urgent",
+        "updated_at": "T+0002"
+      },
+      "observed_attempt_count": 1,
+      "observed_disposition": "APPLIED",
+      "observed_log_evidence": [
+        "RECEIVED",
+        "SOURCE_APPLIED",
+        "TRANSFORMED",
+        "TARGET_ATTEMPT",
+        "APPLIED"
+      ],
+      "observed_target_state": {
+        "account_id": "ACCOUNT-1001",
+        "correlation_id": "TRACE-0002",
+        "coverage_region": "NorthAmerica",
+        "entitlement_status": "ENABLED",
+        "last_event_id": "EVENT-0002",
+        "product_scope": "CORE_SUITE",
+        "source_version": 2,
+        "support_priority": "Urgent",
+        "updated_at": "T+0002"
+      },
+      "result": "PASS",
+      "scenario": "VALID_TIER_UPDATE",
+      "sequence": 2
+    },
+    {
+      "expected_attempt_count": 1,
+      "expected_disposition": "APPLIED",
+      "expected_log_evidence": [
+        "RECEIVED",
+        "TARGET_ATTEMPT",
+        "APPLIED"
+      ],
+      "expected_reconciliation_implication": "MATCH",
+      "expected_target_state": {
+        "account_id": "ACCOUNT-1001",
+        "correlation_id": "TRACE-0003",
+        "coverage_region": "NorthAmerica",
+        "entitlement_status": "DISABLED",
+        "last_event_id": "EVENT-0003",
+        "product_scope": "CORE_SUITE",
+        "source_version": 3,
+        "support_priority": "Urgent",
+        "updated_at": "T+0003"
+      },
+      "observed_attempt_count": 1,
+      "observed_disposition": "APPLIED",
+      "observed_log_evidence": [
+        "RECEIVED",
+        "SOURCE_APPLIED",
+        "TRANSFORMED",
+        "TARGET_ATTEMPT",
+        "APPLIED"
+      ],
+      "observed_target_state": {
+        "account_id": "ACCOUNT-1001",
+        "correlation_id": "TRACE-0003",
+        "coverage_region": "NorthAmerica",
+        "entitlement_status": "DISABLED",
+        "last_event_id": "EVENT-0003",
+        "product_scope": "CORE_SUITE",
+        "source_version": 3,
+        "support_priority": "Urgent",
+        "updated_at": "T+0003"
+      },
+      "result": "PASS",
+      "scenario": "VALID_SUSPENSION",
+      "sequence": 3
+    },
+    {
+      "expected_attempt_count": 0,
+      "expected_disposition": "DUPLICATE_IGNORED",
+      "expected_log_evidence": [
+        "RECEIVED",
+        "DUPLICATE_IGNORED"
+      ],
+      "expected_reconciliation_implication": "MATCH_UNCHANGED",
+      "expected_target_state": {
+        "account_id": "ACCOUNT-1001",
+        "correlation_id": "TRACE-0003",
+        "coverage_region": "NorthAmerica",
+        "entitlement_status": "DISABLED",
+        "last_event_id": "EVENT-0003",
+        "product_scope": "CORE_SUITE",
+        "source_version": 3,
+        "support_priority": "Urgent",
+        "updated_at": "T+0003"
+      },
+      "observed_attempt_count": 0,
+      "observed_disposition": "DUPLICATE_IGNORED",
+      "observed_log_evidence": [
+        "RECEIVED",
+        "DUPLICATE_IGNORED"
+      ],
+      "observed_target_state": {
+        "account_id": "ACCOUNT-1001",
+        "correlation_id": "TRACE-0003",
+        "coverage_region": "NorthAmerica",
+        "entitlement_status": "DISABLED",
+        "last_event_id": "EVENT-0003",
+        "product_scope": "CORE_SUITE",
+        "source_version": 3,
+        "support_priority": "Urgent",
+        "updated_at": "T+0003"
+      },
+      "result": "PASS",
+      "scenario": "DUPLICATE_EVENT",
+      "sequence": 4
+    },
+    {
+      "expected_attempt_count": 0,
+      "expected_disposition": "OUT_OF_ORDER_IGNORED",
+      "expected_log_evidence": [
+        "RECEIVED",
+        "OUT_OF_ORDER_IGNORED"
+      ],
+      "expected_reconciliation_implication": "MATCH_UNCHANGED",
+      "expected_target_state": {
+        "account_id": "ACCOUNT-1001",
+        "correlation_id": "TRACE-0003",
+        "coverage_region": "NorthAmerica",
+        "entitlement_status": "DISABLED",
+        "last_event_id": "EVENT-0003",
+        "product_scope": "CORE_SUITE",
+        "source_version": 3,
+        "support_priority": "Urgent",
+        "updated_at": "T+0003"
+      },
+      "observed_attempt_count": 0,
+      "observed_disposition": "OUT_OF_ORDER_IGNORED",
+      "observed_log_evidence": [
+        "RECEIVED",
+        "OUT_OF_ORDER_IGNORED"
+      ],
+      "observed_target_state": {
+        "account_id": "ACCOUNT-1001",
+        "correlation_id": "TRACE-0003",
+        "coverage_region": "NorthAmerica",
+        "entitlement_status": "DISABLED",
+        "last_event_id": "EVENT-0003",
+        "product_scope": "CORE_SUITE",
+        "source_version": 3,
+        "support_priority": "Urgent",
+        "updated_at": "T+0003"
+      },
+      "result": "PASS",
+      "scenario": "OUT_OF_ORDER_EVENT",
+      "sequence": 5
+    },
+    {
+      "expected_attempt_count": 0,
+      "expected_disposition": "REJECTED_MISSING_REQUIRED_FIELD",
+      "expected_log_evidence": [
+        "RECEIVED",
+        "REJECTED_MISSING_REQUIRED_FIELD"
+      ],
+      "expected_reconciliation_implication": "NO_AUTHORITATIVE_SOURCE_RECORD",
+      "expected_target_state": null,
+      "observed_attempt_count": 0,
+      "observed_disposition": "REJECTED_MISSING_REQUIRED_FIELD",
+      "observed_log_evidence": [
+        "RECEIVED",
+        "REJECTED_MISSING_REQUIRED_FIELD"
+      ],
+      "observed_target_state": null,
+      "result": "PASS",
+      "scenario": "MISSING_REQUIRED_FIELD",
+      "sequence": 6
+    },
+    {
+      "expected_attempt_count": 0,
+      "expected_disposition": "REJECTED_INVALID_ENUM",
+      "expected_log_evidence": [
+        "RECEIVED",
+        "REJECTED_INVALID_ENUM"
+      ],
+      "expected_reconciliation_implication": "NO_AUTHORITATIVE_SOURCE_RECORD",
+      "expected_target_state": null,
+      "observed_attempt_count": 0,
+      "observed_disposition": "REJECTED_INVALID_ENUM",
+      "observed_log_evidence": [
+        "RECEIVED",
+        "REJECTED_INVALID_ENUM"
+      ],
+      "observed_target_state": null,
+      "result": "PASS",
+      "scenario": "INVALID_ENUM_VALUE",
+      "sequence": 7
+    },
+    {
+      "expected_attempt_count": 2,
+      "expected_disposition": "APPLIED_AFTER_RETRY",
+      "expected_log_evidence": [
+        "RECEIVED",
+        "TARGET_ATTEMPT",
+        "RETRY_SCHEDULED",
+        "TARGET_ATTEMPT",
+        "APPLIED_AFTER_RETRY"
+      ],
+      "expected_reconciliation_implication": "MATCH_AFTER_RETRY",
+      "expected_target_state": {
+        "account_id": "ACCOUNT-1002",
+        "correlation_id": "TRACE-0008",
+        "coverage_region": "Europe",
+        "entitlement_status": "ENABLED",
+        "last_event_id": "EVENT-0007",
+        "product_scope": "ANALYTICS",
+        "source_version": 1,
+        "support_priority": "High",
+        "updated_at": "T+0008"
+      },
+      "observed_attempt_count": 2,
+      "observed_disposition": "APPLIED_AFTER_RETRY",
+      "observed_log_evidence": [
+        "RECEIVED",
+        "SOURCE_APPLIED",
+        "TRANSFORMED",
+        "TARGET_ATTEMPT",
+        "RETRY_SCHEDULED",
+        "TARGET_ATTEMPT",
+        "APPLIED_AFTER_RETRY"
+      ],
+      "observed_target_state": {
+        "account_id": "ACCOUNT-1002",
+        "correlation_id": "TRACE-0008",
+        "coverage_region": "Europe",
+        "entitlement_status": "ENABLED",
+        "last_event_id": "EVENT-0007",
+        "product_scope": "ANALYTICS",
+        "source_version": 1,
+        "support_priority": "High",
+        "updated_at": "T+0008"
+      },
+      "result": "PASS",
+      "scenario": "TRANSIENT_429_RECOVERY",
+      "sequence": 8
+    },
+    {
+      "expected_attempt_count": 3,
+      "expected_disposition": "DEAD_LETTERED_RETRY_EXHAUSTED",
+      "expected_log_evidence": [
+        "RECEIVED",
+        "TARGET_ATTEMPT",
+        "RETRY_SCHEDULED",
+        "TARGET_ATTEMPT",
+        "RETRY_SCHEDULED",
+        "TARGET_ATTEMPT",
+        "DEAD_LETTERED_RETRY_EXHAUSTED"
+      ],
+      "expected_reconciliation_implication": "MISSING_TARGET_UNTIL_REPLAY",
+      "expected_target_state": null,
+      "observed_attempt_count": 3,
+      "observed_disposition": "DEAD_LETTERED_RETRY_EXHAUSTED",
+      "observed_log_evidence": [
+        "RECEIVED",
+        "SOURCE_APPLIED",
+        "TRANSFORMED",
+        "TARGET_ATTEMPT",
+        "RETRY_SCHEDULED",
+        "TARGET_ATTEMPT",
+        "RETRY_SCHEDULED",
+        "TARGET_ATTEMPT",
+        "DEAD_LETTERED_RETRY_EXHAUSTED"
+      ],
+      "observed_target_state": null,
+      "result": "PASS",
+      "scenario": "TRANSIENT_503_EXHAUSTION",
+      "sequence": 9
+    },
+    {
+      "expected_attempt_count": 0,
+      "expected_disposition": "REJECTED_UNAUTHORIZED",
+      "expected_log_evidence": [
+        "RECEIVED",
+        "REJECTED_UNAUTHORIZED"
+      ],
+      "expected_reconciliation_implication": "COUNTERFEIT_DELIVERY_NOT_SOURCE_TRUTH",
+      "expected_target_state": null,
+      "observed_attempt_count": 0,
+      "observed_disposition": "REJECTED_UNAUTHORIZED",
+      "observed_log_evidence": [
+        "RECEIVED",
+        "REJECTED_UNAUTHORIZED"
+      ],
+      "observed_target_state": null,
+      "result": "PASS",
+      "scenario": "AUTHENTICATION_FAILURE",
+      "sequence": 10
+    },
+    {
+      "expected_attempt_count": 0,
+      "expected_disposition": "FIELD_MISMATCH_DETECTED_AND_CORRECTED",
+      "expected_log_evidence": [
+        "FIELD_MISMATCH",
+        "RECONCILIATION_CORRECTION_APPLIED",
+        "MATCH"
+      ],
+      "expected_reconciliation_implication": "FIELD_MISMATCH_THEN_MATCH",
+      "expected_target_state": {
+        "account_id": "ACCOUNT-1002",
+        "correlation_id": "TRACE-0011",
+        "coverage_region": "Europe",
+        "entitlement_status": "ENABLED",
+        "last_event_id": "EVENT-0007",
+        "product_scope": "ANALYTICS",
+        "source_version": 1,
+        "support_priority": "High",
+        "updated_at": "T+0011"
+      },
+      "observed_attempt_count": 0,
+      "observed_disposition": "FIELD_MISMATCH_DETECTED_AND_CORRECTED",
+      "observed_log_evidence": [
+        "FIELD_MISMATCH",
+        "RECONCILIATION_CORRECTION_APPLIED",
+        "MATCH"
+      ],
+      "observed_target_state": {
+        "account_id": "ACCOUNT-1002",
+        "correlation_id": "TRACE-0011",
+        "coverage_region": "Europe",
+        "entitlement_status": "ENABLED",
+        "last_event_id": "EVENT-0007",
+        "product_scope": "ANALYTICS",
+        "source_version": 1,
+        "support_priority": "High",
+        "updated_at": "T+0011"
+      },
+      "result": "PASS",
+      "scenario": "RECONCILIATION_MISMATCH",
+      "sequence": 11
+    },
+    {
+      "expected_attempt_count": 1,
+      "expected_disposition": "RESOLVED_AFTER_REPLAY",
+      "expected_log_evidence": [
+        "REPLAY_ELIGIBLE",
+        "REPLAY_RESERVED",
+        "TARGET_ATTEMPT",
+        "RESOLVED_AFTER_REPLAY"
+      ],
+      "expected_reconciliation_implication": "FINAL_RECONCILIATION_COMPLETE",
+      "expected_target_state": {
+        "account_id": "ACCOUNT-1003",
+        "correlation_id": "TRACE-0012",
+        "coverage_region": "AsiaPacific",
+        "entitlement_status": "ENABLED",
+        "last_event_id": "EVENT-0008",
+        "product_scope": "SERVICE_HUB",
+        "source_version": 1,
+        "support_priority": "Normal",
+        "updated_at": "T+0012"
+      },
+      "observed_attempt_count": 1,
+      "observed_disposition": "RESOLVED_AFTER_REPLAY",
+      "observed_log_evidence": [
+        "REPLAY_ELIGIBLE",
+        "REPLAY_RESERVED",
+        "TARGET_ATTEMPT",
+        "RESOLVED_AFTER_REPLAY"
+      ],
+      "observed_target_state": {
+        "account_id": "ACCOUNT-1003",
+        "correlation_id": "TRACE-0012",
+        "coverage_region": "AsiaPacific",
+        "entitlement_status": "ENABLED",
+        "last_event_id": "EVENT-0008",
+        "product_scope": "SERVICE_HUB",
+        "source_version": 1,
+        "support_priority": "Normal",
+        "updated_at": "T+0012"
+      },
+      "result": "PASS",
+      "scenario": "DEAD_LETTER_REPLAY",
+      "sequence": 12
+    }
+  ],
+  "schema_version": "1.0.0",
+  "source_accounts": [
+    {
+      "account_id": "ACCOUNT-1001",
+      "account_status": "Suspended",
+      "contract_state": "Current",
+      "last_event_id": "EVENT-0003",
+      "occurred_at": "T+0003",
+      "product_family": "Core Suite",
+      "region": "NorthAmerica",
+      "source_version": 3,
+      "support_tier": "Premium"
+    },
+    {
+      "account_id": "ACCOUNT-1002",
+      "account_status": "Active",
+      "contract_state": "Current",
+      "last_event_id": "EVENT-0007",
+      "occurred_at": "T+0008",
+      "product_family": "Analytics",
+      "region": "Europe",
+      "source_version": 1,
+      "support_tier": "Priority"
+    },
+    {
+      "account_id": "ACCOUNT-1003",
+      "account_status": "Active",
+      "contract_state": "Current",
+      "last_event_id": "EVENT-0008",
+      "occurred_at": "T+0009",
+      "product_family": "Service Hub",
+      "region": "AsiaPacific",
+      "source_version": 1,
+      "support_tier": "Standard"
+    }
+  ],
+  "target_entitlements": [
+    {
+      "account_id": "ACCOUNT-1001",
+      "correlation_id": "TRACE-0003",
+      "coverage_region": "NorthAmerica",
+      "entitlement_status": "DISABLED",
+      "last_event_id": "EVENT-0003",
+      "product_scope": "CORE_SUITE",
+      "source_version": 3,
+      "support_priority": "Urgent",
+      "updated_at": "T+0003"
+    },
+    {
+      "account_id": "ACCOUNT-1002",
+      "correlation_id": "TRACE-0011",
+      "coverage_region": "Europe",
+      "entitlement_status": "ENABLED",
+      "last_event_id": "EVENT-0007",
+      "product_scope": "ANALYTICS",
+      "source_version": 1,
+      "support_priority": "High",
+      "updated_at": "T+0011"
+    },
+    {
+      "account_id": "ACCOUNT-1003",
+      "correlation_id": "TRACE-0012",
+      "coverage_region": "AsiaPacific",
+      "entitlement_status": "ENABLED",
+      "last_event_id": "EVENT-0008",
+      "product_scope": "SERVICE_HUB",
+      "source_version": 1,
+      "support_priority": "Normal",
+      "updated_at": "T+0012"
+    }
+  ],
+  "terminal": "PASS_REFERENCE_ORCHESTRATOR_12_OF_12_AND_FINAL_RECONCILIATION",
+  "test_summary": {
+    "expected": 12,
+    "failed": 0,
+    "passed": 12,
+    "result": "PASS"
+  }
+}

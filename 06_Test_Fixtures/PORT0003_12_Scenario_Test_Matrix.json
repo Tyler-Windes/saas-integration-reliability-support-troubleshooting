@@ -1,0 +1,449 @@
+{
+  "schema_version": "1.0.0",
+  "exercise_boundary": "SYNTHETIC_LOCAL_EXERCISE_ONLY; NO_REAL_CUSTOMER_OR_PRODUCTION_OUTCOME",
+  "scenario_count": 12,
+  "scenarios": [
+    {
+      "sequence": 1,
+      "name": "VALID_CREATE",
+      "correlation_id": "TRACE-0001",
+      "operation": "PROCESS_EVENT",
+      "synthetic_input": {
+        "authentication": "VALID",
+        "fault_plan": [],
+        "event": {
+          "event_id": "EVENT-0001",
+          "event_version": 1,
+          "event_type": "account.created",
+          "account_id": "ACCOUNT-1001",
+          "account_status": "Active",
+          "support_tier": "Standard",
+          "region": "NorthAmerica",
+          "product_family": "Core Suite",
+          "contract_state": "Current",
+          "occurred_at": "T+0001"
+        }
+      },
+      "expected_transformation": {
+        "entitlement_status": "ENABLED",
+        "support_priority": "Normal",
+        "coverage_region": "NorthAmerica",
+        "product_scope": "CORE_SUITE"
+      },
+      "expected_disposition": "APPLIED",
+      "expected_attempt_count": 1,
+      "expected_target_state": {
+        "account_id": "ACCOUNT-1001",
+        "entitlement_status": "ENABLED",
+        "support_priority": "Normal",
+        "coverage_region": "NorthAmerica",
+        "product_scope": "CORE_SUITE",
+        "source_version": 1,
+        "correlation_id": "TRACE-0001",
+        "last_event_id": "EVENT-0001",
+        "updated_at": "T+0001"
+      },
+      "expected_log_evidence": ["RECEIVED", "TARGET_ATTEMPT", "APPLIED"],
+      "expected_reconciliation_implication": "MATCH"
+    },
+    {
+      "sequence": 2,
+      "name": "VALID_TIER_UPDATE",
+      "correlation_id": "TRACE-0002",
+      "operation": "PROCESS_EVENT",
+      "synthetic_input": {
+        "authentication": "VALID",
+        "fault_plan": [],
+        "event": {
+          "event_id": "EVENT-0002",
+          "event_version": 2,
+          "event_type": "account.updated",
+          "account_id": "ACCOUNT-1001",
+          "account_status": "Active",
+          "support_tier": "Premium",
+          "region": "NorthAmerica",
+          "product_family": "Core Suite",
+          "contract_state": "Current",
+          "occurred_at": "T+0002"
+        }
+      },
+      "expected_transformation": {
+        "entitlement_status": "ENABLED",
+        "support_priority": "Urgent",
+        "coverage_region": "NorthAmerica",
+        "product_scope": "CORE_SUITE"
+      },
+      "expected_disposition": "APPLIED",
+      "expected_attempt_count": 1,
+      "expected_target_state": {
+        "account_id": "ACCOUNT-1001",
+        "entitlement_status": "ENABLED",
+        "support_priority": "Urgent",
+        "coverage_region": "NorthAmerica",
+        "product_scope": "CORE_SUITE",
+        "source_version": 2,
+        "correlation_id": "TRACE-0002",
+        "last_event_id": "EVENT-0002",
+        "updated_at": "T+0002"
+      },
+      "expected_log_evidence": ["RECEIVED", "TARGET_ATTEMPT", "APPLIED"],
+      "expected_reconciliation_implication": "MATCH"
+    },
+    {
+      "sequence": 3,
+      "name": "VALID_SUSPENSION",
+      "correlation_id": "TRACE-0003",
+      "operation": "PROCESS_EVENT",
+      "synthetic_input": {
+        "authentication": "VALID",
+        "fault_plan": [],
+        "event": {
+          "event_id": "EVENT-0003",
+          "event_version": 3,
+          "event_type": "account.suspended",
+          "account_id": "ACCOUNT-1001",
+          "account_status": "Suspended",
+          "support_tier": "Premium",
+          "region": "NorthAmerica",
+          "product_family": "Core Suite",
+          "contract_state": "Current",
+          "occurred_at": "T+0003"
+        }
+      },
+      "expected_transformation": {
+        "entitlement_status": "DISABLED",
+        "support_priority": "Urgent",
+        "coverage_region": "NorthAmerica",
+        "product_scope": "CORE_SUITE"
+      },
+      "expected_disposition": "APPLIED",
+      "expected_attempt_count": 1,
+      "expected_target_state": {
+        "account_id": "ACCOUNT-1001",
+        "entitlement_status": "DISABLED",
+        "support_priority": "Urgent",
+        "coverage_region": "NorthAmerica",
+        "product_scope": "CORE_SUITE",
+        "source_version": 3,
+        "correlation_id": "TRACE-0003",
+        "last_event_id": "EVENT-0003",
+        "updated_at": "T+0003"
+      },
+      "expected_log_evidence": ["RECEIVED", "TARGET_ATTEMPT", "APPLIED"],
+      "expected_reconciliation_implication": "MATCH"
+    },
+    {
+      "sequence": 4,
+      "name": "DUPLICATE_EVENT",
+      "correlation_id": "TRACE-0004",
+      "operation": "PROCESS_EVENT",
+      "synthetic_input": {
+        "authentication": "VALID",
+        "fault_plan": [],
+        "event": {
+          "event_id": "EVENT-0003",
+          "event_version": 3,
+          "event_type": "account.suspended",
+          "account_id": "ACCOUNT-1001",
+          "account_status": "Suspended",
+          "support_tier": "Premium",
+          "region": "NorthAmerica",
+          "product_family": "Core Suite",
+          "contract_state": "Current",
+          "occurred_at": "T+0003"
+        }
+      },
+      "expected_transformation": {
+        "action": "NO_TRANSFORMATION",
+        "reason": "event_id already completed"
+      },
+      "expected_disposition": "DUPLICATE_IGNORED",
+      "expected_attempt_count": 0,
+      "expected_target_state": {
+        "account_id": "ACCOUNT-1001",
+        "entitlement_status": "DISABLED",
+        "support_priority": "Urgent",
+        "coverage_region": "NorthAmerica",
+        "product_scope": "CORE_SUITE",
+        "source_version": 3,
+        "correlation_id": "TRACE-0003",
+        "last_event_id": "EVENT-0003",
+        "updated_at": "T+0003"
+      },
+      "expected_log_evidence": ["RECEIVED", "DUPLICATE_IGNORED"],
+      "expected_reconciliation_implication": "MATCH_UNCHANGED"
+    },
+    {
+      "sequence": 5,
+      "name": "OUT_OF_ORDER_EVENT",
+      "correlation_id": "TRACE-0005",
+      "operation": "PROCESS_EVENT",
+      "synthetic_input": {
+        "authentication": "VALID",
+        "fault_plan": [],
+        "event": {
+          "event_id": "EVENT-0004",
+          "event_version": 2,
+          "event_type": "account.updated",
+          "account_id": "ACCOUNT-1001",
+          "account_status": "Active",
+          "support_tier": "Priority",
+          "region": "NorthAmerica",
+          "product_family": "Core Suite",
+          "contract_state": "Current",
+          "occurred_at": "T+0005"
+        }
+      },
+      "expected_transformation": {
+        "action": "NO_TRANSFORMATION",
+        "reason": "event_version is not greater than target source_version"
+      },
+      "expected_disposition": "OUT_OF_ORDER_IGNORED",
+      "expected_attempt_count": 0,
+      "expected_target_state": {
+        "account_id": "ACCOUNT-1001",
+        "entitlement_status": "DISABLED",
+        "support_priority": "Urgent",
+        "coverage_region": "NorthAmerica",
+        "product_scope": "CORE_SUITE",
+        "source_version": 3,
+        "correlation_id": "TRACE-0003",
+        "last_event_id": "EVENT-0003",
+        "updated_at": "T+0003"
+      },
+      "expected_log_evidence": ["RECEIVED", "OUT_OF_ORDER_IGNORED"],
+      "expected_reconciliation_implication": "MATCH_UNCHANGED"
+    },
+    {
+      "sequence": 6,
+      "name": "MISSING_REQUIRED_FIELD",
+      "correlation_id": "TRACE-0006",
+      "operation": "PROCESS_EVENT",
+      "synthetic_input": {
+        "authentication": "VALID",
+        "fault_plan": [],
+        "event": {
+          "event_id": "EVENT-0005",
+          "event_version": 1,
+          "event_type": "account.created",
+          "account_id": "ACCOUNT-1002",
+          "account_status": "Active",
+          "support_tier": "Priority",
+          "product_family": "Analytics",
+          "contract_state": "Current",
+          "occurred_at": "T+0006"
+        }
+      },
+      "expected_transformation": {
+        "action": "NO_TRANSFORMATION",
+        "reason": "required region is absent"
+      },
+      "expected_disposition": "REJECTED_MISSING_REQUIRED_FIELD",
+      "expected_attempt_count": 0,
+      "expected_target_state": null,
+      "expected_log_evidence": ["RECEIVED", "REJECTED_MISSING_REQUIRED_FIELD"],
+      "expected_reconciliation_implication": "NO_AUTHORITATIVE_SOURCE_RECORD"
+    },
+    {
+      "sequence": 7,
+      "name": "INVALID_ENUM_VALUE",
+      "correlation_id": "TRACE-0007",
+      "operation": "PROCESS_EVENT",
+      "synthetic_input": {
+        "authentication": "VALID",
+        "fault_plan": [],
+        "event": {
+          "event_id": "EVENT-0006",
+          "event_version": 1,
+          "event_type": "account.created",
+          "account_id": "ACCOUNT-1003",
+          "account_status": "Active",
+          "support_tier": "Elite",
+          "region": "AsiaPacific",
+          "product_family": "Service Hub",
+          "contract_state": "Current",
+          "occurred_at": "T+0007"
+        }
+      },
+      "expected_transformation": {
+        "action": "NO_TRANSFORMATION",
+        "reason": "support_tier is outside the allowed enum"
+      },
+      "expected_disposition": "REJECTED_INVALID_ENUM",
+      "expected_attempt_count": 0,
+      "expected_target_state": null,
+      "expected_log_evidence": ["RECEIVED", "REJECTED_INVALID_ENUM"],
+      "expected_reconciliation_implication": "NO_AUTHORITATIVE_SOURCE_RECORD"
+    },
+    {
+      "sequence": 8,
+      "name": "TRANSIENT_429_RECOVERY",
+      "correlation_id": "TRACE-0008",
+      "operation": "PROCESS_EVENT",
+      "synthetic_input": {
+        "authentication": "VALID",
+        "fault_plan": [429, 200],
+        "event": {
+          "event_id": "EVENT-0007",
+          "event_version": 1,
+          "event_type": "account.created",
+          "account_id": "ACCOUNT-1002",
+          "account_status": "Active",
+          "support_tier": "Priority",
+          "region": "Europe",
+          "product_family": "Analytics",
+          "contract_state": "Current",
+          "occurred_at": "T+0008"
+        }
+      },
+      "expected_transformation": {
+        "entitlement_status": "ENABLED",
+        "support_priority": "High",
+        "coverage_region": "Europe",
+        "product_scope": "ANALYTICS"
+      },
+      "expected_disposition": "APPLIED_AFTER_RETRY",
+      "expected_attempt_count": 2,
+      "expected_target_state": {
+        "account_id": "ACCOUNT-1002",
+        "entitlement_status": "ENABLED",
+        "support_priority": "High",
+        "coverage_region": "Europe",
+        "product_scope": "ANALYTICS",
+        "source_version": 1,
+        "correlation_id": "TRACE-0008",
+        "last_event_id": "EVENT-0007",
+        "updated_at": "T+0008"
+      },
+      "expected_log_evidence": ["RECEIVED", "TARGET_ATTEMPT", "RETRY_SCHEDULED", "TARGET_ATTEMPT", "APPLIED_AFTER_RETRY"],
+      "expected_reconciliation_implication": "MATCH_AFTER_RETRY"
+    },
+    {
+      "sequence": 9,
+      "name": "TRANSIENT_503_EXHAUSTION",
+      "correlation_id": "TRACE-0009",
+      "operation": "PROCESS_EVENT",
+      "synthetic_input": {
+        "authentication": "VALID",
+        "fault_plan": [503, 503, 503],
+        "event": {
+          "event_id": "EVENT-0008",
+          "event_version": 1,
+          "event_type": "account.created",
+          "account_id": "ACCOUNT-1003",
+          "account_status": "Active",
+          "support_tier": "Standard",
+          "region": "AsiaPacific",
+          "product_family": "Service Hub",
+          "contract_state": "Current",
+          "occurred_at": "T+0009"
+        }
+      },
+      "expected_transformation": {
+        "entitlement_status": "ENABLED",
+        "support_priority": "Normal",
+        "coverage_region": "AsiaPacific",
+        "product_scope": "SERVICE_HUB"
+      },
+      "expected_disposition": "DEAD_LETTERED_RETRY_EXHAUSTED",
+      "expected_attempt_count": 3,
+      "expected_target_state": null,
+      "expected_log_evidence": ["RECEIVED", "TARGET_ATTEMPT", "RETRY_SCHEDULED", "TARGET_ATTEMPT", "RETRY_SCHEDULED", "TARGET_ATTEMPT", "DEAD_LETTERED_RETRY_EXHAUSTED"],
+      "expected_reconciliation_implication": "MISSING_TARGET_UNTIL_REPLAY"
+    },
+    {
+      "sequence": 10,
+      "name": "AUTHENTICATION_FAILURE",
+      "correlation_id": "TRACE-0010",
+      "operation": "PROCESS_EVENT",
+      "synthetic_input": {
+        "authentication": "INVALID",
+        "fault_plan": [],
+        "event": {
+          "event_id": "EVENT-0009",
+          "event_version": 1,
+          "event_type": "account.created",
+          "account_id": "ACCOUNT-1004",
+          "account_status": "Active",
+          "support_tier": "Premium",
+          "region": "NorthAmerica",
+          "product_family": "Core Suite",
+          "contract_state": "Current",
+          "occurred_at": "T+0010"
+        }
+      },
+      "expected_transformation": {
+        "action": "NO_TRANSFORMATION",
+        "reason": "local API-key authentication failed"
+      },
+      "expected_disposition": "REJECTED_UNAUTHORIZED",
+      "expected_attempt_count": 0,
+      "expected_target_state": null,
+      "expected_log_evidence": ["RECEIVED", "REJECTED_UNAUTHORIZED"],
+      "expected_reconciliation_implication": "COUNTERFEIT_DELIVERY_NOT_SOURCE_TRUTH"
+    },
+    {
+      "sequence": 11,
+      "name": "RECONCILIATION_MISMATCH",
+      "correlation_id": "TRACE-0011",
+      "operation": "TAMPER_RECONCILE_CORRECT",
+      "synthetic_input": {
+        "account_id": "ACCOUNT-1002",
+        "field": "support_priority",
+        "modeled_bad_value": "Normal",
+        "correct_value": "High"
+      },
+      "expected_transformation": {
+        "action": "REPAIR_FROM_LATEST_VALID_SOURCE",
+        "reason": "field mismatch detected at the same source version"
+      },
+      "expected_disposition": "FIELD_MISMATCH_DETECTED_AND_CORRECTED",
+      "expected_attempt_count": 0,
+      "expected_target_state": {
+        "account_id": "ACCOUNT-1002",
+        "entitlement_status": "ENABLED",
+        "support_priority": "High",
+        "coverage_region": "Europe",
+        "product_scope": "ANALYTICS",
+        "source_version": 1,
+        "correlation_id": "TRACE-0011",
+        "last_event_id": "EVENT-0007",
+        "updated_at": "T+0011"
+      },
+      "expected_log_evidence": ["FIELD_MISMATCH", "RECONCILIATION_CORRECTION_APPLIED", "MATCH"],
+      "expected_reconciliation_implication": "FIELD_MISMATCH_THEN_MATCH"
+    },
+    {
+      "sequence": 12,
+      "name": "DEAD_LETTER_REPLAY",
+      "correlation_id": "TRACE-0012",
+      "operation": "REPLAY_DEAD_LETTER",
+      "synthetic_input": {
+        "event_id": "EVENT-0008",
+        "original_correlation_id": "TRACE-0009",
+        "fault_condition": "CLEARED"
+      },
+      "expected_transformation": {
+        "entitlement_status": "ENABLED",
+        "support_priority": "Normal",
+        "coverage_region": "AsiaPacific",
+        "product_scope": "SERVICE_HUB"
+      },
+      "expected_disposition": "RESOLVED_AFTER_REPLAY",
+      "expected_attempt_count": 1,
+      "expected_target_state": {
+        "account_id": "ACCOUNT-1003",
+        "entitlement_status": "ENABLED",
+        "support_priority": "Normal",
+        "coverage_region": "AsiaPacific",
+        "product_scope": "SERVICE_HUB",
+        "source_version": 1,
+        "correlation_id": "TRACE-0012",
+        "last_event_id": "EVENT-0008",
+        "updated_at": "T+0012"
+      },
+      "expected_log_evidence": ["REPLAY_ELIGIBLE", "REPLAY_RESERVED", "TARGET_ATTEMPT", "RESOLVED_AFTER_REPLAY"],
+      "expected_reconciliation_implication": "FINAL_RECONCILIATION_COMPLETE"
+    }
+  ]
+}

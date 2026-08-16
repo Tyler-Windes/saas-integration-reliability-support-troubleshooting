@@ -1,0 +1,247 @@
+{
+  "name": "PORT-0003 Synthetic Entitlement Synchronization — Unexecuted Draft",
+  "active": false,
+  "nodes": [
+    {
+      "id": "webhook-intake",
+      "name": "Synthetic Event Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-840, 0],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "port0003-account-entitlement",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "correlation",
+      "name": "Retain Correlation",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-620, 0],
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "correlation-field",
+              "name": "correlation_id",
+              "type": "string",
+              "value": "={{ $json.correlation_id }}"
+            },
+            {
+              "id": "event-body",
+              "name": "event",
+              "type": "object",
+              "value": "={{ $json.body }}"
+            },
+            {
+              "id": "provided-key",
+              "name": "provided_key",
+              "type": "string",
+              "value": "={{ $json.headers['x-port0003-api-key'] }}"
+            }
+          ]
+        },
+        "includeOtherFields": false
+      }
+    },
+    {
+      "id": "authenticate",
+      "name": "Local Authentication",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [-400, 0],
+      "parameters": {
+        "conditions": {
+          "options": {"caseSensitive": true, "typeValidation": "strict"},
+          "conditions": [
+            {
+              "id": "key-match",
+              "leftValue": "={{ $json.provided_key }}",
+              "rightValue": "={{ $env.PORT0003_INBOUND_API_KEY }}",
+              "operator": {"type": "string", "operation": "equals"}
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "validate-map",
+      "name": "Validate and Map",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-160, -100],
+      "parameters": {
+        "jsCode": "const e = $json.event; const required = ['event_id','event_version','event_type','account_id','account_status','support_tier','region','product_family','contract_state','occurred_at']; for (const f of required) if (e[f] === undefined || e[f] === null || e[f] === '') throw new Error('PERMANENT_REQUIRED_FIELD:' + f); const status = (['Suspended','Closed'].includes(e.account_status) || e.contract_state === 'Expired') ? 'DISABLED' : (e.account_status === 'Active' && e.contract_state === 'Current') ? 'ENABLED' : (e.account_status === 'Active' && e.contract_state === 'Pending') ? 'PENDING' : null; const priorities = {Standard:'Normal',Priority:'High',Premium:'Urgent'}; const scope = e.product_family.trim().toUpperCase().replace(/[\\s\\-/]+/g,'_').replace(/^_+|_+$/g,''); if (!status || !priorities[e.support_tier] || !/^[A-Z0-9]+(?:_[A-Z0-9]+)*$/.test(scope)) throw new Error('PERMANENT_UNMAPPABLE'); return [{json:{correlation_id:$json.correlation_id,event:e,target:{account_id:e.account_id,entitlement_status:status,support_priority:priorities[e.support_tier],coverage_region:e.region,product_scope:scope,source_version:e.event_version,correlation_id:$json.correlation_id,last_event_id:e.event_id,updated_at:e.occurred_at}}}];"
+      }
+    },
+    {
+      "id": "reserve",
+      "name": "Reserve Idempotency and Order",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [80, -100],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.PORT0003_STATE_URL + '/state/reserve' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "X-PORT0003-API-Key", "value": "={{ $env.PORT0003_STATE_API_KEY }}"}
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({event_id:$json.event.event_id,event_version:$json.event.event_version,account_id:$json.event.account_id,correlation_id:$json.correlation_id,replay:false,original_correlation_id:null}) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "route-reservation",
+      "name": "Route Reservation Result",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [320, -100],
+      "parameters": {
+        "conditions": {
+          "options": {"caseSensitive": true, "typeValidation": "strict"},
+          "conditions": [
+            {
+              "id": "allowed",
+              "leftValue": "={{ $json.allowed }}",
+              "rightValue": true,
+              "operator": {"type": "boolean", "operation": "true", "singleValue": true}
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "target-upsert",
+      "name": "Upsert Synthetic Entitlement",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [560, -180],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 100,
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $env.PORT0003_TARGET_URL + '/target/entitlements/' + $('Validate and Map').item.json.target.account_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "X-PORT0003-API-Key", "value": "={{ $env.PORT0003_TARGET_API_KEY }}"}
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($('Validate and Map').item.json.target) }}",
+        "options": {"response": {"response": {"neverError": false}}}
+      }
+    },
+    {
+      "id": "dead-letter",
+      "name": "Record Retry Exhaustion",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [800, -40],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.PORT0003_STATE_URL + '/state/dead-letter' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {"name": "X-PORT0003-API-Key", "value": "={{ $env.PORT0003_STATE_API_KEY }}"}
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({event_id:$('Validate and Map').item.json.event.event_id,account_id:$('Validate and Map').item.json.event.account_id,correlation_id:$('Validate and Map').item.json.correlation_id,attempts:3,final_response:'HTTP_503',failure_classification:'TRANSIENT_RETRY_EXHAUSTED',replay_eligibility:'INELIGIBLE_UNTIL_FAULT_CLEARED',evidence_timestamp:'T+0000',event_payload:$('Validate and Map').item.json.event}) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "success-response",
+      "name": "Respond with Disposition",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [800, -260],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ {correlation_id:$('Validate and Map').item.json.correlation_id,disposition:'PROCESSED'} }}",
+        "options": {"responseCode": 200}
+      }
+    },
+    {
+      "id": "rejected-response",
+      "name": "Respond without Target Call",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [560, 80],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ {correlation_id:$json.correlation_id || null,disposition:$json.disposition || 'REJECTED_UNAUTHORIZED'} }}",
+        "options": {"responseCode": 200}
+      }
+    }
+  ],
+  "connections": {
+    "Synthetic Event Webhook": {
+      "main": [[{"node": "Retain Correlation", "type": "main", "index": 0}]]
+    },
+    "Retain Correlation": {
+      "main": [[{"node": "Local Authentication", "type": "main", "index": 0}]]
+    },
+    "Local Authentication": {
+      "main": [
+        [{"node": "Validate and Map", "type": "main", "index": 0}],
+        [{"node": "Respond without Target Call", "type": "main", "index": 0}]
+      ]
+    },
+    "Validate and Map": {
+      "main": [[{"node": "Reserve Idempotency and Order", "type": "main", "index": 0}]]
+    },
+    "Reserve Idempotency and Order": {
+      "main": [[{"node": "Route Reservation Result", "type": "main", "index": 0}]]
+    },
+    "Route Reservation Result": {
+      "main": [
+        [{"node": "Upsert Synthetic Entitlement", "type": "main", "index": 0}],
+        [{"node": "Respond without Target Call", "type": "main", "index": 0}]
+      ]
+    },
+    "Upsert Synthetic Entitlement": {
+      "main": [
+        [{"node": "Respond with Disposition", "type": "main", "index": 0}],
+        [{"node": "Record Retry Exhaustion", "type": "main", "index": 0}]
+      ]
+    },
+    "Record Retry Exhaustion": {
+      "main": [[{"node": "Respond without Target Call", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "none",
+    "saveDataSuccessExecution": "none"
+  },
+  "pinData": {},
+  "tags": [],
+  "meta": {
+    "execution_status": "N8N_RUNTIME_EXECUTION_DEFERRED",
+    "structural_status": "UNEXECUTED_DRAFT_FOR_PORTABILITY_REVIEW",
+    "validated_structure_only": true,
+    "contains_credentials": false,
+    "uses_community_nodes": false,
+    "exercise_boundary": "SYNTHETIC_LOCAL_EXERCISE_ONLY; NO_REAL_CUSTOMER_OR_PRODUCTION_OUTCOME"
+  }
+}

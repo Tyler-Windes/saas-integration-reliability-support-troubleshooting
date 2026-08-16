@@ -1,0 +1,214 @@
+{
+  "deterministic_evidence": {
+    "execution_sha256": "399E3FAF6C5AEE97920142457AC677AA2823AC7DAAF689A4D3297FC6243C6AEF",
+    "trace_sha256": "12B4367F65AC15B80AD98CC035A2A93FE6B47C67943D91B12C7997A3480601A3"
+  },
+  "execution_authority": "PYTHON_REFERENCE_ORCHESTRATOR",
+  "external_actions": 0,
+  "file_count": 24,
+  "final_reconciliation": {
+    "FIELD_MISMATCH": 0,
+    "MATCH": 3,
+    "MISSING_TARGET": 0,
+    "STALE_TARGET": 0,
+    "UNEXPECTED_TARGET": 0
+  },
+  "gate_summary": {
+    "fail": 0,
+    "pass": 14,
+    "total": 14
+  },
+  "gates": [
+    {
+      "evidence": {
+        "controlled_files": 24,
+        "validation_result": "GENERATED_OR_VERIFIED"
+      },
+      "gate": 1,
+      "name": "Exact curated public topology",
+      "status": "PASS"
+    },
+    {
+      "evidence": {
+        "json": 5,
+        "jsonl_records": 48,
+        "toml": 1
+      },
+      "gate": 2,
+      "name": "Structured files parse",
+      "status": "PASS"
+    },
+    {
+      "evidence": {
+        "locked_packages": 23,
+        "required_runtime_pins": {
+          "fastapi": "0.139.2",
+          "httpx": "0.28.1",
+          "pydantic": "2.13.4",
+          "pytest": "9.1.1",
+          "setuptools": "80.9.0",
+          "uvicorn": "0.51.0"
+        }
+      },
+      "gate": 3,
+      "name": "Pinned dependency authority",
+      "status": "PASS"
+    },
+    {
+      "evidence": {
+        "source_health": 200,
+        "state_with_key": 200,
+        "state_without_key": 401,
+        "target_with_key": 200,
+        "target_without_key": 401
+      },
+      "gate": 4,
+      "name": "Executable contracts and local API authentication",
+      "status": "PASS"
+    },
+    {
+      "evidence": {
+        "columns": 12,
+        "formula_like_cells": 0,
+        "rows": 28
+      },
+      "gate": 5,
+      "name": "Public-safe mapping and reliability rules",
+      "status": "PASS"
+    },
+    {
+      "evidence": {
+        "mismatch_repair_attempts": 0,
+        "scenarios": 12,
+        "test_functions": 12
+      },
+      "gate": 6,
+      "name": "Exact scenario and test topology",
+      "status": "PASS"
+    },
+    {
+      "evidence": {
+        "collected": 12,
+        "failed": 0,
+        "passed": 12,
+        "skipped": 0
+      },
+      "gate": 7,
+      "name": "Twelve deterministic pytest outcomes",
+      "status": "PASS"
+    },
+    {
+      "evidence": {
+        "execution_evidence_sha256": "399E3FAF6C5AEE97920142457AC677AA2823AC7DAAF689A4D3297FC6243C6AEF",
+        "structured_trace_sha256": "12B4367F65AC15B80AD98CC035A2A93FE6B47C67943D91B12C7997A3480601A3",
+        "two_clean_runs_identical": true
+      },
+      "gate": 8,
+      "name": "Two-run deterministic execution evidence",
+      "status": "PASS"
+    },
+    {
+      "evidence": {
+        "attempt_vector": [
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0,
+          2,
+          3,
+          0,
+          0,
+          1
+        ],
+        "dead_letter_replay": "RESOLVED_WITH_LINKED_CORRELATION",
+        "mismatch_repair": "LATEST_VALID_SOURCE_TEST_PATH",
+        "scenarios_passed": 12
+      },
+      "gate": 9,
+      "name": "Reliability, repair, and replay behavior",
+      "status": "PASS"
+    },
+    {
+      "evidence": {
+        "correlations": 12,
+        "exceptions": 0,
+        "matches": 3,
+        "trace_records": 48
+      },
+      "gate": 10,
+      "name": "Reconciliation and trace integrity",
+      "status": "PASS"
+    },
+    {
+      "evidence": {
+        "active": false,
+        "credentials": 0,
+        "execution_status": "N8N_RUNTIME_EXECUTION_DEFERRED",
+        "nodes": 10
+      },
+      "gate": 11,
+      "name": "n8n structural-only truth boundary",
+      "status": "PASS"
+    },
+    {
+      "evidence": {
+        "architecture_visuals": 2,
+        "case_study_visuals": 3,
+        "incidents": 3,
+        "runbook_topics": 10
+      },
+      "gate": 12,
+      "name": "Public documentation and support coverage",
+      "status": "PASS"
+    },
+    {
+      "evidence": {
+        "absolute_paths": 0,
+        "credentials": 0,
+        "emails": 0,
+        "files_scanned": 24,
+        "runtime_artifacts": 0
+      },
+      "gate": 13,
+      "name": "Privacy, secret, path, and runtime-artifact boundary",
+      "status": "PASS"
+    },
+    {
+      "evidence": {
+        "broken_links": 0,
+        "relative_links_checked": 9
+      },
+      "gate": 14,
+      "name": "Local relative-link integrity",
+      "status": "PASS"
+    }
+  ],
+  "n8n_execution_claim": false,
+  "n8n_runtime_status": "N8N_RUNTIME_EXECUTION_DEFERRED",
+  "schema_version": "1.0.0",
+  "scope": "PUBLIC_TECHNICAL_WORK_SAMPLE",
+  "synthetic_nonproduction_boundary": true,
+  "terminal": "PASS_PORT0003_PUBLIC_TECHNICAL_CANDIDATE",
+  "tests": {
+    "attempt_vector": [
+      1,
+      1,
+      1,
+      0,
+      0,
+      0,
+      0,
+      2,
+      3,
+      0,
+      0,
+      1
+    ],
+    "failed": 0,
+    "passed": 12,
+    "scenarios": 12
+  }
+}
